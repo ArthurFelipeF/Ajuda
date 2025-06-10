@@ -1,7 +1,6 @@
 package com.example.poupae
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -14,17 +13,17 @@ import com.example.poupae.model.TipoTransacao
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import com.example.poupae.model.TransacaoDao // Importe TransacaoDao
-import com.example.poupae.AppDatabase // Importe AppDatabase
-import kotlinx.coroutines.launch // Importe launch
-import androidx.lifecycle.lifecycleScope // Importe lifecycleScope
+import com.example.poupae.model.TransacaoDao
+import com.example.poupae.AppDatabase
+import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
 
 class ItemTransacaoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityItemTransacaoBinding
     private var selectedDateMillis: Long = System.currentTimeMillis()
-    private var originalTransacao: ItemTransacao? = null // Para armazenar o item original em modo de edição
-    private lateinit var transacaoDao: TransacaoDao // Declarar o DAO
+    private var originalTransacao: ItemTransacao? = null
+    private lateinit var transacaoDao: TransacaoDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,44 +38,44 @@ class ItemTransacaoActivity : AppCompatActivity() {
             insets
         }
 
-        // Inicialize o DAO
+
         transacaoDao = AppDatabase.getDatabase(this).transacaoDao()
 
-        // Verifica se veio um ItemTransacao para edição
-        originalTransacao = intent.getParcelableExtra("itemParaEditar") // Chave usada para passar o item
+
+        originalTransacao = intent.getParcelableExtra("itemParaEditar")
         originalTransacao?.let { item ->
-            // Se um item foi passado, estamos em modo de edição
+
             binding.edtNome.setText(item.title)
             binding.edtValor.setText(item.valor.toString())
-            selectedDateMillis = item.date // Carrega a data do item original
+            selectedDateMillis = item.date
             val calendar = Calendar.getInstance().apply { timeInMillis = selectedDateMillis }
-            updateDateTextView(calendar) // Atualiza o TextView da data
+            updateDateTextView(calendar)
 
             if (item.tip == TipoTransacao.RENDA) {
                 binding.radioRenda.isChecked = true
             } else {
                 binding.radioDespesa.isChecked = true
             }
-            binding.btnAddItem.text = "Salvar Alterações" // Muda o texto do botão
+            binding.btnAddItem.text = "Salvar Alterações"
         } ?: run {
-            // Se nenhum item foi passado, estamos em modo de adição, define a data atual como padrão
+
             val calendar = Calendar.getInstance()
             selectedDateMillis = calendar.timeInMillis
             updateDateTextView(calendar)
         }
 
 
-        // Lógica para o botão de voltar
+
         binding.btnVoltar.setOnClickListener {
             finish()
         }
 
-        // Lógica para o campo de data
+
         binding.txtDataSelecionada.setOnClickListener {
             showDatePickerDialog()
         }
 
-        // Lógica para o botão de adicionar/salvar item
+
         binding.btnAddItem.setOnClickListener {
             val title = binding.edtNome.text.toString().trim()
             val valorText = binding.edtValor.text.toString().trim()
@@ -116,7 +115,7 @@ class ItemTransacaoActivity : AppCompatActivity() {
             val transacaoFinal: ItemTransacao
 
             if (originalTransacao != null) {
-                // Modo de edição: cria uma nova instância com os dados atualizados e o ID original
+
                 transacaoFinal = originalTransacao!!.copy(
                     title = title,
                     valor = valor,
@@ -126,11 +125,11 @@ class ItemTransacaoActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     transacaoDao.update(transacaoFinal)
                     Toast.makeText(this@ItemTransacaoActivity, "Transação atualizada!", Toast.LENGTH_SHORT).show()
-                    setResult(RESULT_OK) // Apenas sinaliza que houve uma atualização
+                    setResult(RESULT_OK)
                     finish()
                 }
             } else {
-                // Modo de adição: cria uma nova transação
+
                 transacaoFinal = ItemTransacao(
                     title = title,
                     valor = valor,

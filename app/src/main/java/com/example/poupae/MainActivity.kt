@@ -21,7 +21,7 @@ import java.util.Locale
 import kotlinx.coroutines.flow.collectLatest
 import com.example.poupae.model.TransacaoDao
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import androidx.core.content.ContextCompat // Importe ContextCompat para cores
+import androidx.core.content.ContextCompat
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +32,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: AppDatabase
     private lateinit var transacaoDao: TransacaoDao
 
-    // Launcher para adicionar/editar transações
+
     private val transacaoResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                // Não precisamos mais do extra "novaTransacao" aqui,
-                // pois as operações (inserir/atualizar) já são feitas na ItemTransacaoActivity
-                // e o Room Flow vai automaticamente atualizar a lista.
+
                 Toast.makeText(this, "Operação de transação concluída!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Operação de transação cancelada.", Toast.LENGTH_SHORT).show()
@@ -61,22 +59,22 @@ class MainActivity : AppCompatActivity() {
         database = AppDatabase.getDatabase(this)
         transacaoDao = database.transacaoDao()
 
-        // Inicialize o adapter passando o novo listener de clique longo
+
         adapter = PostsListAdapter(this, transacoes) { itemTransacaoClicado ->
-            // Listener de clique longo: Mostrar opções Editar/Excluir
+
             val options = arrayOf("Editar", "Excluir")
             MaterialAlertDialogBuilder(this)
                 .setTitle("Escolha uma opção")
                 .setItems(options) { dialog, which ->
                     when (which) {
-                        0 -> { // Clicou em "Editar"
+                        0 -> {
                             val intent = Intent(this, ItemTransacaoActivity::class.java).apply {
                                 putExtra("itemParaEditar", itemTransacaoClicado) // Passa o item para edição
                             }
                             transacaoResultLauncher.launch(intent)
                         }
-                        1 -> { // Clicou em "Excluir"
-                            // Agora mostra o diálogo de confirmação de exclusão
+                        1 -> {
+
                             showDeleteConfirmationDialog(itemTransacaoClicado)
                         }
                     }

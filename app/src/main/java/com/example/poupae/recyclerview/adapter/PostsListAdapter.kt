@@ -40,9 +40,9 @@ class PostsListAdapter(
             val formatoMoeda = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
             valoresItemBinding.txtValor.text = formatoMoeda.format(itemTransacao.valor)
 
-            // Formata e exibe a data usando o ID correto: txtData
+
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-            valoresItemBinding.txtData.text = dateFormat.format(Date(itemTransacao.date)) // <--- ATUALIZADO AQUI PARA txtData
+            valoresItemBinding.txtData.text = dateFormat.format(Date(itemTransacao.date))
 
             if (itemTransacao.tip == TipoTransacao.DESPESA) {
                 valoresItemBinding.txtValor.setTextColor(ContextCompat.getColor(valoresItemBinding.root.context, R.color.despesa_color))
