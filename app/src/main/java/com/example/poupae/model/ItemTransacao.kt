@@ -13,7 +13,7 @@ data class ItemTransacao(
     val title: String,
     val valor: Double,
     val tip: TipoTransacao,
-    val date: Long
+    val date: Long // <--- ESSA LINHA PRECISA ESTAR AQUI!
 ) : Parcelable
 
 @Parcelize

@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="renda_color">#00B378</color> <color name="despesa_color">#FF3B30</color> </resources>
+    <color name="renda_color">#00B378</color> <color name="despesa_color">#FF3B30</color>
+    <color name="item_clicado_background">#feffff</color>
+</resources>

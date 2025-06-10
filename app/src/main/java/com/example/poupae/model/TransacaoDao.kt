@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Delete
+import androidx.room.Update // Importe esta anotação
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,6 +18,9 @@ interface TransacaoDao {
 
     @Delete
     suspend fun delete(itemTransacao: ItemTransacao)
+
+    @Update // Adicione este método para atualizar transações existentes
+    suspend fun update(itemTransacao: ItemTransacao)
 
     @Query("DELETE FROM transacoes WHERE id = :transacaoId")
     suspend fun deleteById(transacaoId: Long)
